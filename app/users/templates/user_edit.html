@@ -1,0 +1,7 @@
+<form  method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="{{ btn_title }}">
+</form>
+
+<a href="{% url 'users:password_change'  %}">Сменить пароль</a> | <a href="{% url 'users:index'  %}">К списку пользователей</a>

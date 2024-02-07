@@ -1,0 +1,8 @@
+login
+<form method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="{{ btn_title }}">
+</form>
+
+<a href="{% url 'users:password_reset'  %}">Сбросить пароль</a>
