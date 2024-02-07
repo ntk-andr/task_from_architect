@@ -3,7 +3,6 @@ version: '3.8'
 services:
   web: 
     build: .
-    # command: ls -la app
     command: poetry run python app/manage.py runserver 0.0.0.0:8080
     volumes:
       - ./:/usr/src/app
