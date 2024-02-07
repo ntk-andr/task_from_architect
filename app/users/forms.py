@@ -2,7 +2,7 @@ from typing import Any
 from datetime import timedelta
 from django import forms
 from users.models import Person
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, SetPasswordForm
 # from django.forms import 
 from django.core.mail import send_mail
 from users.models import EmailVerification
@@ -76,3 +76,8 @@ class UserRegistrationForm(UserCreationForm):
         )
         record.send_verification_mail()
         return user
+
+class UserSetPasswordForm(SetPasswordForm):
+
+    class Meta:
+        model = Person

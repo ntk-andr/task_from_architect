@@ -2,6 +2,8 @@ from django.urls import path, include
 from users.views import (
     IndexView, RegistrationUserView, LoginUserView, DetailUserView, DeleteUserView, LogoutUserView, ProfileUserView,
     UserPasswordChangeView, UserPasswordChangeDoneView, UserPasswordResetView, EmailVerificationView
+    , UserPasswordResetDoneView, 
+    UserPasswordResetConfirmView, UserPasswordResetCompleteView
     )
 
 urlpatterns = [
@@ -18,6 +20,11 @@ urlpatterns = [
     path('password_change', UserPasswordChangeView.as_view(), name='password_change'),
     path('password_change_done', UserPasswordChangeDoneView.as_view(), name='password_change_done'),
     
+    path('password_reset/<uidb64>/<token>', UserPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('password_reset', UserPasswordResetView.as_view(), name='password_reset'),
+    path('password_reset/done', UserPasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('password_reset/complete', UserPasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    
+    
     path('verify/<str:email>/<code>/', EmailVerificationView.as_view(), name='email_verification'),
 ]

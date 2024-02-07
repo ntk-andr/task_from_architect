@@ -5,15 +5,16 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth.views import PasswordChangeView, PasswordResetView, PasswordResetDoneView
+from django.contrib.auth.views import PasswordChangeView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
+from django.contrib.auth.forms import PasswordResetForm
 from django.contrib import auth, messages
 from django.urls import reverse, reverse_lazy
 from users.models import Person, EmailVerification
-from users.forms import UserLoginForm, UserRegistrationForm, ProfileUserForm
+from users.forms import UserLoginForm, UserRegistrationForm, ProfileUserForm, UserSetPasswordForm
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from .mixins import BtnTitleMixin
-
+from django.contrib.auth.hashers import make_password
 
 
 # Create your views here.
@@ -103,13 +104,14 @@ class UserPasswordChangeView(BtnTitleMixin, PasswordChangeView):
 class UserPasswordResetView(BtnTitleMixin, PasswordResetView):
     model = Person
     template_name = 'user_password_reset.html'
-    success_url = reverse_lazy("users:login")
+    email_template_name = "password_reset_email.html"
+    success_url = reverse_lazy("users:password_reset_done")
     btn_title = "Сбросить пароль"
     
-    
+
 class UserPasswordChangeDoneView(PasswordResetDoneView):
     model = Person
-    template_name = 'password_reset_done.html'
+    template_name = 'password_change_done.html'
     
 class EmailVerificationView(TemplateView):
     template_name = "email_verification.html"
@@ -124,3 +126,17 @@ class EmailVerificationView(TemplateView):
             return super().get(request, *args, **kwargs)
         else:
             return HttpResponseRedirect(reverse('users:index'))
+        
+class UserPasswordResetDoneView(PasswordResetDoneView):    
+    template_name = 'password_reset_done.html'
+
+    
+    
+class UserPasswordResetConfirmView(BtnTitleMixin,PasswordResetConfirmView):
+    template_name = 'user_password_reset.html'
+    success_url = reverse_lazy("users:password_reset_complete")
+    form_class=UserSetPasswordForm
+    btn_title = "Сменить Пароль"
+    
+class UserPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = "password_reset_complete.html"
